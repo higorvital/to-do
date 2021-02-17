@@ -1,12 +1,12 @@
-# Cadastrar usuário
+# Login
 
 **RF**
 
-- O usuário deve poder se cadastrar com nome, e-mail, senha e confirmação de senha;
+- O usuário deve poder logar utilizando e-mail e senha;
 
 **RN**
 
-- O usuário não pode se cadastrar com um e-mail já cadastrado;
+- O usuário deve permanecer autenticado por até 3 dias;
 
 # Alterar dados
 
@@ -18,16 +18,6 @@
 
 - Caso mude a senha, o usuário deve informar a senha antiga;
 - Caso mude a senha, o usuário deve confirmar a nova senha;
-
-# Login
-
-**RF**
-
-- O usuário deve poder logar utilizando e-mail e senha;
-
-**RN**
-
-- O usuário deve permanecer autenticado por até 3 dias;
 
 # Criação de tarefa
 
