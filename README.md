@@ -1,37 +1,3 @@
-# Login
-
-**RF**
-
-- O usuário deve poder logar utilizando e-mail e senha;
-
-**RN**
-
-- O usuário deve permanecer autenticado por até 3 dias;
-
-# Alterar dados
-
-**RF**
-
-- O usuário deve poder mudar seu nome, e-mail e senha;
-
-**RN**
-
-- Caso mude a senha, o usuário deve informar a senha antiga;
-- Caso mude a senha, o usuário deve confirmar a nova senha;
-
-# Criação de tarefa
-
-**RF**
-
-- O usuário deve poder criar uma tarefa em um dia e mês espefífico;
-- O usuário deve poder criar uma tarefa em um dia, mês e horário espefífico;
-- O usuário deve poder informar se quer ou não receber notificação da tarefa;
-- O usuário deve poder informar com que antecedencia quer receber a notificação da tarefa;
-
-**RN**
-
-- Não podem ter duas tarefas no mesmo horário;
-
 # Alteração de tarefa
 
 **RF**

@@ -19,8 +19,12 @@ class UsersController {
             password_confirmation: Yup.string().required().oneOf([Yup.ref('password')])
         });
 
-        if(!(await schema.isValid(data))){
-            throw new AppError("Dados inválidos");
+        try {
+            await schema.validate(data, {
+                abortEarly: false
+            });
+        } catch (error) {
+            throw new AppError(error);
         }
 
         const {name, email, password} = data;
@@ -58,18 +62,11 @@ class UsersController {
         });
 
         try {
-            
             await schema.validate(data, {
                 abortEarly: false
             });
         } catch (error) {
-            console.log('asas');
             throw new AppError(error);
-
-        }
-
-        if(!(await schema.isValid(data))){
-            throw new AppError("Dados inválidos");
         }
 
         // const {user_id, name, email, password, old_password, password_confirmation} = data;
