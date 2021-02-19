@@ -10,5 +10,6 @@ tasksRouter.use(authMiddleware);
 
 tasksRouter.post('/', tasksController.create);
 tasksRouter.put('/:task_id', tasksController.update);
+tasksRouter.delete('/:task_id', tasksController.delete);
 
 export default tasksRouter;

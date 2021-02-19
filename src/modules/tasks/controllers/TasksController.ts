@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import * as Yup from 'yup';
 import AppError from '../../../shared/errors/AppError';
 import CreateTaskService from '../services/CreateTaskService';
+import DeleteTaskService from '../services/DeleteTaskService';
 import UpdateTaskService from '../services/UpdateTaskService';
 
 class TasksController{
@@ -82,6 +83,18 @@ class TasksController{
         });
 
         return response.status(200).json(task);
+
+    }
+
+    async delete(request: Request, response: Response){
+
+        const {task_id} = request.params;
+
+        const deleteTaskService = container.resolve(DeleteTaskService);
+
+        await deleteTaskService.execute(request.user.id, task_id);
+
+        return response.status(200).send();
 
     }
 }

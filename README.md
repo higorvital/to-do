@@ -1,13 +1,3 @@
-# Alteração de tarefa
-
-**RF**
-
-- O usuário deve poder alterar o dia, mês e horário de um tarefa;
-
-**RN**
-
-- O usuário não deve poder mudar a tarefa pra um horário já ocupado;
-
 # Deleção de tarefa
 
 **RF**
