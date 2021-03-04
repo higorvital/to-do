@@ -25,12 +25,12 @@
 
 **O usuário deve poder criar um tarefa, informando nome, horário e data**
 **O usuário deve poder adicionar uma descrição para a tarefa**
-- O usuário deve poder adicionar uma subcategoria para a tarefa;
+**O usuário deve poder adicionar uma subcategoria para a tarefa**
 
 # Editar tarefa
 
 **O usuário deve poder editar o nome, horário, data e descrição da tarefa**
-- O usuário deve poder editar a subcategoria da tarefa;
+**O usuário deve poder editar a subcategoria da tarefa**
 **O usuário deve poder marcar uma tarefa como importante**
 **O usuário deve poder marcar uma tarefa como completa**
 
