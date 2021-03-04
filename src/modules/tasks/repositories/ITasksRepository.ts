@@ -15,6 +15,8 @@ interface ITasksRepository{
     findByDateTime(data: IFindTasksByDateTime): Promise<Task | undefined>
     findImportantTasks(user_id: string, completed: boolean): Promise<Task[]>;
     findCompletedTasks(user_id: string): Promise<Task[]>;
+    findBySubcategory(subcategory_id: string): Promise<Task[]>;
+
 }
 
 export default ITasksRepository;

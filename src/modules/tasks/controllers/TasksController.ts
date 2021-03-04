@@ -53,7 +53,8 @@ class TasksController{
             time: Yup.object().shape({
                 hour: Yup.number(),
                 minute: Yup.number(),
-            })
+            }),
+            subcategory_id: Yup.string()
         });
 
 
@@ -92,7 +93,8 @@ class TasksController{
             time: Yup.object().shape({
                 hour: Yup.number(),
                 minute: Yup.number(),
-            })
+            }),
+            subcategory_id: Yup.string()
         });
 
 

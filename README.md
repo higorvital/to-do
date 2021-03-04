@@ -24,8 +24,8 @@
 # Criar tarefa
 
 **O usuário deve poder criar um tarefa, informando nome, horário e data**
-**O usuário deve poder adicionar uma descrição para o tarefa**
-- O usuário deve poder adicionar uma subcategoria para o tarefa;
+**O usuário deve poder adicionar uma descrição para a tarefa**
+- O usuário deve poder adicionar uma subcategoria para a tarefa;
 
 # Editar tarefa
 
@@ -43,7 +43,7 @@
 # Visualizar tarefas
 
 **O usuário deve poder visualizar as tarefas de acordo com o dia**
-- O usuário deve poder visualizar todas as tarefas de acordo com a subcategoria;
+**O usuário deve poder visualizar todas as tarefas de acordo com a subcategoria**
 **O usuário deve poder visualizar as tarefas feitas**
 **O usuário deve poder visualizar as tarefas importantes**
 
@@ -53,33 +53,39 @@
 
 # Criar categoria
 
-- O usuário deve poder criar uma categoria com nome; 
+**O usuário deve poder criar uma categoria com nome** 
 
-- O nome da categoria deve ser único;
+**O nome da categoria deve ser único para o usuário** 
+
+# Atualizar categorias
+
+**O usuário deve poder atualizar suas categorias**
+
+**O nome da categoria deve ser único para o usuário** 
 
 # Visualizar categorias
 
-- O usuário deve poder visualizar categorias; 
+**O usuário deve poder visualizar suas categorias**
 
 # Deletar categoria
 
-- O usuário deve poder deletar uma categoria; 
+**O usuário deve poder deletar uma categoria** 
 
-- Ao deletar um categoria, suas subcategorias devem ser deletadas;
+**Ao deletar um categoria, suas subcategorias devem ser deletadas**
 
 # Criar subcategoria
 
-- O usuário deve poder criar uma subcategoria com nome e categoria; 
+**O usuário deve poder criar uma subcategoria com nome e categoria**
 
-- O nome da subcategoria deve ser único;
+**O nome da subcategoria deve ser único para cada categoria**
 
 # Deletar subcategoria
 
-- O usuário deve poder deletar uma subcategoria; 
+**O usuário deve poder deletar uma subcategoria**
 
 # Visualizar subcategorias
 
-- O usuário deve poder visualizar subcategorias de acordo com a categoria;
+**O usuário deve poder visualizar subcategorias de acordo com a categoria**
 
 # Recuperar senha
 

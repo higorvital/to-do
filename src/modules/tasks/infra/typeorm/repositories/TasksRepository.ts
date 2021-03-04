@@ -17,7 +17,7 @@ class TasksRepository implements ITasksRepository{
         this.connection = this.ormRepository.createQueryBuilder("tasks");
     }
 
-    public async create({user_id, title, description, date, time, important}: ICreateTask){
+    public async create({user_id, title, description, date, time, important, subcategory_id}: ICreateTask){
 
         const task = this.ormRepository.create({
             user_id,
@@ -25,7 +25,8 @@ class TasksRepository implements ITasksRepository{
             description,
             date,
             time,
-            important
+            important,
+            subcategory_id
         });
 
         await this.ormRepository.save(task);
@@ -127,9 +128,18 @@ class TasksRepository implements ITasksRepository{
 
         const tasks = await this.connection.where('tasks.user_id = :user_id AND tasks.completed = true', {user_id}).orderBy('completed_at').getMany();
 
-        console.log(tasks);
         return tasks;
 
+    }
+
+    public async findBySubcategory(subcategory_id: string){
+        const tasks = await this.ormRepository.find({
+            where: {
+                subcategory_id
+            }
+        })
+
+        return tasks;
     }
 
 

@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import User from "../../../../users/infra/typeorm/models/User";
+import Subcategory from "./Subcategory";
 
 @Entity('tasks')
 class Task {
@@ -34,6 +35,14 @@ class Task {
 
     @Column()
     important: boolean;
+
+    @Column()
+    subcategory_id: string;
+
+    @ManyToOne(()=>Subcategory, {
+        eager: true
+    })
+    subcategory: Subcategory;
 
     @CreateDateColumn()
     created_at: Date;

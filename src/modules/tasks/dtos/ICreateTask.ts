@@ -16,6 +16,7 @@ interface ICreateTask {
     time?: Date;
     important?: boolean;
     user_id: string;
+    subcategory_id?: string;
 }
 
 export default ICreateTask;

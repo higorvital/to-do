@@ -3,6 +3,7 @@ import AppError from "../../../shared/errors/AppError";
 import ITasksRepository from "../repositories/ITasksRepository";
 import {isBefore} from 'date-fns';
 import Task from "../infra/typeorm/models/Task";
+import ISubcategoriesRepository from "../repositories/ISubcategoriesRepository";
 
 interface TimeDTO {
     hour: number;
@@ -22,6 +23,7 @@ interface CreateTaskDTO {
     time?: TimeDTO;
     important?: boolean;
     user_id: string;
+    subcategory_id?: string;
 }
 
 @injectable()
@@ -29,10 +31,12 @@ class CreateTaskService{
 
     constructor(
         @inject('TasksRepository')
-        private tasksRepository: ITasksRepository
+        private tasksRepository: ITasksRepository,
+        @inject('SubcategoriesRepository')
+        private subcategoriesRepository: ISubcategoriesRepository
     ){}
 
-    public async execute({user_id, title, date, time, description, important}: CreateTaskDTO): Promise<Task>{
+    public async execute({user_id, title, date, time, description, important, subcategory_id}: CreateTaskDTO): Promise<Task>{
 
         let dateTask = new Date(date.year, date.month - 1, date.day);
         let dateTimeTask = new Date(dateTask);
@@ -59,7 +63,19 @@ class CreateTaskService{
             throw new AppError("Não pode criar uma tarefa em uma data passada");
         }
 
-        const task = await this.tasksRepository.create({user_id, title, date: dateTask, time: timeTask, description, important});
+        if(subcategory_id){
+            const subcategory = await this.subcategoriesRepository.findById(subcategory_id);
+
+            if(!subcategory){
+                throw new AppError("Subcategoria não existe");
+            }
+
+            if(subcategory.category.user_id !== user_id){
+                throw new AppError("Essa categoria não pertence a esse usuário");
+            }
+        }
+
+        const task = await this.tasksRepository.create({user_id, title, date: dateTask, time: timeTask, description, important, subcategory_id});
 
         return task;
 
