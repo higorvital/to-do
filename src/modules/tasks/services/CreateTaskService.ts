@@ -20,6 +20,7 @@ interface CreateTaskDTO {
     description?: string;
     date: DateDTO;
     time?: TimeDTO;
+    important?: boolean;
     user_id: string;
 }
 
@@ -31,7 +32,7 @@ class CreateTaskService{
         private tasksRepository: ITasksRepository
     ){}
 
-    public async execute({user_id, title, date, time, description}: CreateTaskDTO): Promise<Task>{
+    public async execute({user_id, title, date, time, description, important}: CreateTaskDTO): Promise<Task>{
 
         let dateTask = new Date(date.year, date.month - 1, date.day);
         let dateTimeTask = new Date(dateTask);
@@ -39,7 +40,7 @@ class CreateTaskService{
 
         if(time){
 
-            const taskTimeUnavailable = await this.tasksRepository.findByTime({user_id, ...time});
+            const taskTimeUnavailable = await this.tasksRepository.findByDateTime({user_id, ...date, ...time});
 
             if(taskTimeUnavailable){
                 throw new AppError("Horário indisponível");
@@ -58,7 +59,7 @@ class CreateTaskService{
             throw new AppError("Não pode criar uma tarefa em uma data passada");
         }
 
-        const task = await this.tasksRepository.create({user_id, title, date: dateTask, time: timeTask, description});
+        const task = await this.tasksRepository.create({user_id, title, date: dateTask, time: timeTask, description, important});
 
         return task;
 

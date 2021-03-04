@@ -26,6 +26,15 @@ class Task {
     @JoinColumn({name: 'user_id'})
     user: User;
 
+    @Column()
+    completed: boolean;
+
+    @Column('timestamp')
+    completed_at: Date;
+
+    @Column()
+    important: boolean;
+
     @CreateDateColumn()
     created_at: Date;
 

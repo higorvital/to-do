@@ -1,7 +1,8 @@
-import { EntityRepository, getRepository, Raw, Repository } from "typeorm";
+import { EntityRepository, getRepository, Repository, SelectQueryBuilder } from "typeorm";
 import ICreateTask from "../../../dtos/ICreateTask";
 import IFindTasksByTime from "../../../dtos/IFindTaskByTime";
 import IFindTasksByDate from "../../../dtos/IFindTasksByDate";
+import IFindTasksByDateTime from "../../../dtos/IFindTasksByDateTime";
 import ITasksRepository from "../../../repositories/ITasksRepository";
 import Task from "../models/Task";
 
@@ -9,19 +10,22 @@ import Task from "../models/Task";
 class TasksRepository implements ITasksRepository{
 
     private ormRepository: Repository<Task>;
+    private connection: SelectQueryBuilder<Task>;
 
     constructor(){
         this.ormRepository = getRepository(Task);
+        this.connection = this.ormRepository.createQueryBuilder("tasks");
     }
 
-    public async create({user_id, title, description, date, time}: ICreateTask){
+    public async create({user_id, title, description, date, time, important}: ICreateTask){
 
         const task = this.ormRepository.create({
             user_id,
             title,
             description,
             date,
-            time
+            time,
+            important
         });
 
         await this.ormRepository.save(task);
@@ -55,7 +59,8 @@ class TasksRepository implements ITasksRepository{
         const tasks = await this.ormRepository.find({
             where: {
                 user_id,
-                date: `${parsedDay}-${parsedMonth}-${year}`
+                date: `${year}-${parsedMonth}-${parsedDay}`,
+//                date: `${parsedDay}-${parsedMonth}-${year}`
                 // date: Raw(dateFieldName => `
                 //     to_char(${dateFieldName}), 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'
                 // `)
@@ -85,7 +90,7 @@ class TasksRepository implements ITasksRepository{
 
     }
 
-    public async findByDateTime({user_id, day, month, year}: IFindTasksByDate,{hour, minute}: IFindTasksByTime){
+    public async findByDateTime({user_id, day, month, year, hour, minute}: IFindTasksByDateTime){
 
         const parsedDay = String(day).padStart(2, '0');
         const parsedMonth = String(month).padStart(2, '0');
@@ -95,7 +100,9 @@ class TasksRepository implements ITasksRepository{
         const task = await this.ormRepository.findOne({
             where: {
                 user_id,
-                date: `${parsedDay}-${parsedMonth}-${year}`,
+                date: `${year}-${parsedMonth}-${parsedDay}`,
+
+                //                date: `${parsedDay}-${parsedMonth}-${year}`,
                 time: `${parsedHour}:${parsedMinute}:00`
             }
         });
@@ -103,6 +110,28 @@ class TasksRepository implements ITasksRepository{
         return task;
 
     }
+
+    public async findImportantTasks(user_id: string, completed: boolean){
+
+        const tasks = await this.ormRepository.find({
+            user_id,
+            important: true,
+            completed
+        });
+
+        return tasks;
+
+    }
+
+    public async findCompletedTasks(user_id: string){
+
+        const tasks = await this.connection.where('tasks.user_id = :user_id AND tasks.completed = true', {user_id}).orderBy('completed_at').getMany();
+
+        console.log(tasks);
+        return tasks;
+
+    }
+
 
 
 }

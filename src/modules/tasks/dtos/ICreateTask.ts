@@ -14,6 +14,7 @@ interface ICreateTask {
     description?: string;
     date: Date;
     time?: Date;
+    important?: boolean;
     user_id: string;
 }
 
