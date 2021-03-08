@@ -6,7 +6,7 @@
 
 # Atualizar usuário
 - [x] O usuário dever poder alterar seu nome, e-mail e senha;
-- O usuário dever poder alterar seu avatar;
+- [ ] O usuário dever poder alterar seu avatar;
 - [x] O usuário não pode mudar e-mail para um já cadastrado;
 - [x] Ao alterar a senha, deve ser informada a senha antiga;
 - [x] Ao alterar a senha, uma confirmação da nova senha deve ser enviada;
