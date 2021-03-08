@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var auth_1 = __importDefault(require("../../../../../shared/infra/http/middlewares/auth"));
+var TaskCompletedController_1 = __importDefault(require("../../../controllers/TaskCompletedController"));
+var TaskImportanceController_1 = __importDefault(require("../../../controllers/TaskImportanceController"));
+var TasksController_1 = __importDefault(require("../../../controllers/TasksController"));
+var tasksController = new TasksController_1.default();
+var taskImportanceController = new TaskImportanceController_1.default();
+var taskCompletedController = new TaskCompletedController_1.default();
+var tasksRouter = express_1.Router();
+tasksRouter.use(auth_1.default);
+tasksRouter.post('/', tasksController.create);
+tasksRouter.put('/:task_id', tasksController.update);
+tasksRouter.delete('/:task_id', tasksController.delete);
+tasksRouter.get('/', tasksController.index);
+tasksRouter.get('/completed', taskCompletedController.index);
+tasksRouter.get('/important', taskImportanceController.index);
+tasksRouter.patch('/:task_id/completed', taskCompletedController.update);
+tasksRouter.patch('/:task_id/important', taskImportanceController.update);
+exports.default = tasksRouter;
