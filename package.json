@@ -6,7 +6,7 @@
   },
   "main": "index.js",
   "repository": "https://github.com/higorvital/to-do.git",
-  "author": "<h.vitall96@gitlab.com>",
+  "author": "<h.vitall96@github.com>",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
