@@ -57,16 +57,16 @@ class TasksRepository implements ITasksRepository{
         const parsedMonth = String(month).padStart(2, '0');
         const parsedDay = String(day).padStart(2, '0');
 
-        const tasks = await this.ormRepository.find({
-            where: {
-                user_id,
-                date: `${year}-${parsedMonth}-${parsedDay}`,
-//                date: `${parsedDay}-${parsedMonth}-${year}`
-                // date: Raw(dateFieldName => `
-                //     to_char(${dateFieldName}), 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'
-                // `)
-            }
-        });
+        // const tasks = await this.ormRepository.find({
+        //     where: {
+        //         user_id,
+        //         date: `${year}-${parsedMonth}-${parsedDay}`
+        //     }
+        // });
+
+        const task_date = `${year}-${parsedMonth}-${parsedDay}`;
+
+        const tasks = await this.connection.where('tasks.user_id = :user_id AND tasks.date = :task_date', {user_id, task_date}).orderBy('time').getMany();
 
         return tasks;
 

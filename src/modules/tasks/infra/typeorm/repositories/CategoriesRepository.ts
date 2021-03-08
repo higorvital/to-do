@@ -22,7 +22,9 @@ class CategoriesRepository implements ICategoriesRepository{
     }
 
     public async findById(id: string){
-        const category = await this.ormRepository.findOne(id);
+        const category = await this.ormRepository.findOne(id, {
+            relations: ['subcategories']
+        });
 
         return category;
     }
@@ -31,7 +33,8 @@ class CategoriesRepository implements ICategoriesRepository{
         const categories = await this.ormRepository.find({
             where: {
                 user_id
-            }
+            },
+            relations: ['subcategories']
         });
 
         return categories;
@@ -46,7 +49,8 @@ class CategoriesRepository implements ICategoriesRepository{
             where: {
                 name,
                 user_id
-            }
+            },
+            relations: ['subcategories']
         });
 
         return category;

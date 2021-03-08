@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import Subcategory from "./Subcategory";
 
 @Entity('categories')
 class Category{
@@ -11,6 +12,10 @@ class Category{
 
     @Column()
     user_id: string;
+
+    @OneToMany(()=> Subcategory, subcategory=>subcategory.category)
+    @JoinTable()
+    subcategories: Subcategory[];
 
     @CreateDateColumn()
     created_at: string;

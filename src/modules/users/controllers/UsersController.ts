@@ -45,10 +45,6 @@ class UsersController {
             name: Yup.string().required(),
             email: Yup.string().email().required(),
             password: Yup.string(),
-            // password: Yup.string().when({
-            //     is: true,
-            //     then: Yup.string().min(6).max(16)
-            // }),
             password_confirmation: Yup.string().when('password', {
                 is: (val: boolean) => val,
                 then: Yup.string().required().oneOf([Yup.ref('password')]).min(6).max(16),
