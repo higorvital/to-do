@@ -36,7 +36,7 @@
 - [x] O usuário deve poder visualizar as tarefas feitas;
 - [x] O usuário deve poder visualizar as tarefas importantes;
 
-- Ao visualizar por subcategoria, só as tarefas não completadas devem ser retornadas;
+- [ ] Ao visualizar por subcategoria, só as tarefas não completadas devem ser retornadas;
 - [x] Ao visualizar por feitas, todas as tarefas devem ser ordenadas por horário de finalização;
 - [x] Ao visualizar por importância, só as tarefas não completadas devem ser retornadas;
 
@@ -67,15 +67,15 @@
 
 # Recuperar senha
 
-- O usuário deve poder recuperar sua senha informando seu e-mail;
-- O usuário receberá um e-mail com um link para resetar a senha;
-- O usuário deve poder resetar sua senha, informando uma nova senha e uma confirmação;
+- [ ] O usuário deve poder recuperar sua senha informando seu e-mail;
+- [ ] O usuário receberá um e-mail com um link para resetar a senha;
+- [ ] O usuário deve poder resetar sua senha, informando uma nova senha e uma confirmação;
 
 # Geral
 
-- Cache
-- Máximo de requisições
+- [ ] Cache
+- [ ] Máximo de requisições
 
 # Futuro
 
-- Notificações
+- [ ] Notificações
