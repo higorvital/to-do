@@ -94,7 +94,7 @@ class TasksController{
                 hour: Yup.number(),
                 minute: Yup.number(),
             }),
-            subcategory_id: Yup.string()
+            subcategory_id: Yup.string().nullable()
         });
 
 

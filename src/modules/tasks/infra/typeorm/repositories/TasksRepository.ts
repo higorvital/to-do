@@ -1,9 +1,13 @@
-import { EntityRepository, getRepository, Repository, SelectQueryBuilder } from "typeorm";
+import { EntityRepository, getManager, getRepository, Repository, SelectQueryBuilder } from "typeorm";
 import ICreateTask from "../../../dtos/ICreateTask";
+import IFindBySubcategoryAndDate from "../../../dtos/IFindBySubcategoryAndDate";
+import IFindCompletedTasksByDate from "../../../dtos/IFindCompletedTasksByDate";
+import IFindImportantTasksByDate from "../../../dtos/IFindImportantTasksByDate";
 import IFindTasksByTime from "../../../dtos/IFindTaskByTime";
 import IFindTasksByDate from "../../../dtos/IFindTasksByDate";
 import IFindTasksByDateTime from "../../../dtos/IFindTasksByDateTime";
 import ITasksRepository from "../../../repositories/ITasksRepository";
+import Subcategory from "../models/Subcategory";
 import Task from "../models/Task";
 
 @EntityRepository(Task)
@@ -31,6 +35,12 @@ class TasksRepository implements ITasksRepository{
 
         await this.ormRepository.save(task);
 
+        let task2 = await this.ormRepository.findOne(task.id);
+
+        if(task2){
+            return task2;
+        }
+
         return task;
 
     }
@@ -38,6 +48,13 @@ class TasksRepository implements ITasksRepository{
     public async save(task: Task){
         
         await this.ormRepository.save(task);
+        
+        let task2 = await this.ormRepository.findOne(task.id);
+        
+        if(task2){
+            return task2;
+        }
+            
 
         return task;
     }
@@ -56,18 +73,26 @@ class TasksRepository implements ITasksRepository{
 
         const parsedMonth = String(month).padStart(2, '0');
         const parsedDay = String(day).padStart(2, '0');
-
-        // const tasks = await this.ormRepository.find({
-        //     where: {
-        //         user_id,
-        //         date: `${year}-${parsedMonth}-${parsedDay}`
-        //     }
-        // });
-
+        
         const task_date = `${year}-${parsedMonth}-${parsedDay}`;
 
-        const tasks = await this.connection.where('tasks.user_id = :user_id AND tasks.date = :task_date', {user_id, task_date}).orderBy('time').getMany();
+        const tasks = await this.ormRepository.find({
+            where: {
+                user_id,
+                date: task_date
+            },
+            order: {
+                time: "ASC"
+            }
+            // relations: ['subcategory']
+        });
 
+
+        // console.log(this.connection.leftJoinAndSelect('tasks.subcategory','subcategories').where('tasks.user_id = :user_id AND tasks.date = :task_date', {user_id, task_date}).orderBy('time').getSql());
+
+        // const tasks = await this.connection.leftJoinAndSelect('tasks.subcategory','subcategory').where('tasks.user_id = :user_id AND tasks.date = :task_date', {user_id, task_date}).orderBy('time').getMany();
+
+        // const tasks = getManager().query('SELECT * FROM tasks LEFT JOIN subcategories ON tasks.subcategory_id = subcategories.id ORDER BY time');
         return tasks;
 
     }
@@ -142,6 +167,64 @@ class TasksRepository implements ITasksRepository{
         return tasks;
     }
 
+    public async findImportantTasksByDate({user_id, day, month, year}: IFindImportantTasksByDate){
+
+        const tasks = await this.ormRepository.find(
+            {
+                where: {
+                    user_id,
+                    important: true,
+                    date: `${year}-${month}-${day}`
+                },
+                // relations: ['subcategory'],
+                order: {
+                    time: "ASC"
+                }
+            },
+        );
+
+        return tasks;
+
+    }
+
+    public async findCompletedTasksByDate({user_id, day, month, year}: IFindCompletedTasksByDate){
+
+        const tasks = await this.ormRepository.find(
+            {
+                where: {
+                    user_id,
+                    completed: true,
+                    date: `${year}-${month}-${day}`
+                },
+                // relations: ['subcategory'],
+                order: {
+                    time: "ASC"
+                }
+            },
+        );
+
+        return tasks;
+
+    }
+
+    public async findBySubcategoryAndDate({subcategory_id, day, month, year}: IFindBySubcategoryAndDate){
+
+        const tasks = await this.ormRepository.find(
+            {
+                where: {
+                    subcategory_id,
+                    date: `${year}-${month}-${day}`
+                },
+                // relations: ['subcategory'],
+                order: {
+                    time: "ASC"
+                }
+            },
+        );
+
+        return tasks;
+
+    }
 
 
 }

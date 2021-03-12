@@ -54,8 +54,7 @@ class UpdateTaskService{
 
         if(time){
 
-            const taskTimeUnavailable = await this.tasksRepository.findByTime({user_id, ...time});
-
+            const taskTimeUnavailable = await this.tasksRepository.findByDateTime({user_id, ...date, ...time});
             if(taskTimeUnavailable && taskTimeUnavailable.id !== task.id){
                 throw new AppError("Horário indisponível");
             }
@@ -73,8 +72,10 @@ class UpdateTaskService{
             throw new AppError("Não pode criar uma tarefa em uma data passada");
         }
 
+        let subcategory;
+
         if(subcategory_id){
-            const subcategory = await this.subcategoriesRepository.findById(subcategory_id);
+            subcategory = await this.subcategoriesRepository.findById(subcategory_id);
 
             if(!subcategory){
                 throw new AppError("Subcategoria não existe");
@@ -90,6 +91,7 @@ class UpdateTaskService{
            description,
            date: dateTask,
            time: timeTask, 
+           subcategory,
            subcategory_id
         });
 

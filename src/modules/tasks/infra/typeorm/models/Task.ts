@@ -42,6 +42,7 @@ class Task {
     @ManyToOne(()=>Subcategory, {
         eager: true
     })
+    @JoinColumn({name: 'subcategory_id'})
     subcategory: Subcategory;
 
     @CreateDateColumn()
