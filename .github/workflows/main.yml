@@ -57,7 +57,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/app/to-do
+            cd ~/app/to-do/
             yarn
             ./node_modules/.bin/typeorm migration:run
             pm2 restart to-do-api
