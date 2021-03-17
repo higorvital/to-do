@@ -23,9 +23,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Node.js enviroment
-        uses: actions/setup-node@v1.4.2
+        uses: actions/setup-node@v2.1.5
         with: 
-          node-version: 14.x
+          version: 14.x
 
     # Instalar dependências do yarn/npm
       - name: Install dependencies
