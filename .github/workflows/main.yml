@@ -46,6 +46,6 @@ jobs:
           source: "dist"
           target: "test"
 
-  	# Substituir código existente para na pasta dist pelo novo código
-  	# Executar "yarn" na Digital Ocean
-  	# Restart no servidor Node.js
+      # Substituir código existente para na pasta dist pelo novo código
+      # Executar "yarn" na Digital Ocean
+      # Restart no servidor Node.js
