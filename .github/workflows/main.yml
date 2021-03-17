@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-  	# Executar a build
+      # Executar a build
       - name: Run build
         run: yarn build
 
