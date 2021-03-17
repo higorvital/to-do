@@ -58,6 +58,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/app/to-do/
-            yarn.cmd
-            ./node_modules/.bin/typeorm migration:run
-            pm2 restart to-do-api
+            sh script.sh
