@@ -2,15 +2,25 @@ import {Request, Response} from 'express';
 import { container } from 'tsyringe';
 import * as Yup from 'yup';
 import AppError from '../../../shared/errors/AppError';
-import CreateCategoryService from '../services/CreateCategoryService';
 import CreateSubcategoryService from '../services/CreateSubcategoryService';
-import DeleteCategoryService from '../services/DeleteCategoryService';
 import DeleteSubcategoryService from '../services/DeleteSubcategoryService';
 import ListCategorySubcategoriesService from '../services/ListCategorySubcategories';
-import UpdateCategoryService from '../services/UpdateCategoryService';
+import ListSubcategoryByIdService from '../services/ListSubcategoryByIdService';
 import UpdateSubcategoryService from '../services/UpdateSubcategoryService';
 
 class SubcategoriesController{
+
+    async show(request: Request, response: Response){
+        
+        const {subcategory_id} = request.params;
+
+        const listSubcategoryByIdService = container.resolve(ListSubcategoryByIdService);
+
+        const subcategory = await listSubcategoryByIdService.execute(String(subcategory_id), request.user.id);
+
+        return response.status(200).json(subcategory);
+
+    }
 
     async index(request: Request, response: Response){
         

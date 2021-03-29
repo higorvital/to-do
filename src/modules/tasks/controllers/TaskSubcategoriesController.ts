@@ -13,9 +13,7 @@ class TasksSubcategoriesController{
         const data = request.query;
 
         const schema = Yup.object().shape({
-            day: Yup.number().required(),
-            month: Yup.number().required(),
-            year: Yup.number().required()
+            include_completed: Yup.boolean()
         })
 
         try {
@@ -23,26 +21,30 @@ class TasksSubcategoriesController{
                 abortEarly: false
             });
         } catch (error) {
+
             throw new AppError(error);
         }
 
         const listTasksBySubcategoryService = container.resolve(ListTasksBySubcategoryService);
 
-        const {day, month, year} = request.query;
+        let {include_completed} = request.query;
+
+        let completed = false;
+
+        if(include_completed) {
+            completed = Boolean(include_completed);
+        }
 
         const tasks = await listTasksBySubcategoryService.execute(
             {   
                 subcategory_id,
                 user_id: request.user.id,
-                day: Number(day),
-                month: Number(month),
-                year: Number(year)
-            });
+                include_completed: completed
+            }
+        );
 
         return response.status(200).json(tasks);
     }
-
-
 
 }
 

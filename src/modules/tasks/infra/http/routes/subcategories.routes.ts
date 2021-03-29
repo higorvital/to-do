@@ -11,6 +11,7 @@ const tasksSubcategoriesController = new TasksSubcategoriesController();
 subcategoriesRouter.use(authMiddleware)
 
 subcategoriesRouter.get('/', subcategoriesController.index);
+subcategoriesRouter.get('/:subcategory_id', subcategoriesController.show);
 subcategoriesRouter.get('/:subcategory_id/tasks', tasksSubcategoriesController.index);
 
 subcategoriesRouter.post('/', subcategoriesController.create);

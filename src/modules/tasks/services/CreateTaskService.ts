@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import AppError from "../../../shared/errors/AppError";
 import ITasksRepository from "../repositories/ITasksRepository";
-import {isBefore} from 'date-fns';
+import {isBefore, isSameDay} from 'date-fns';
 import Task from "../infra/typeorm/models/Task";
 import ISubcategoriesRepository from "../repositories/ISubcategoriesRepository";
 
@@ -57,11 +57,18 @@ class CreateTaskService{
 
             dateTimeTask.setHours(time.hour);
             dateTimeTask.setMinutes(time.minute);
+
+            if(isBefore(dateTimeTask, Date.now())){
+                throw new AppError("Não pode criar uma tarefa em uma data passada");
+            }
+        } else{
+
+            if(isBefore(dateTimeTask, Date.now()) && !isSameDay(dateTimeTask, Date.now())){
+                throw new AppError("Não pode criar uma tarefa em uma data passada");
+            }
+
         }
 
-        if(isBefore(dateTimeTask, Date.now())){
-            throw new AppError("Não pode criar uma tarefa em uma data passada");
-        }
 
         if(subcategory_id){
             const subcategory = await this.subcategoriesRepository.findById(subcategory_id);

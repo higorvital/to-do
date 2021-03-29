@@ -54,7 +54,6 @@ class TasksRepository implements ITasksRepository{
         if(task2){
             return task2;
         }
-            
 
         return task;
     }
@@ -157,12 +156,24 @@ class TasksRepository implements ITasksRepository{
 
     }
 
-    public async findBySubcategory(subcategory_id: string){
-        const tasks = await this.ormRepository.find({
-            where: {
-                subcategory_id
-            }
-        })
+    public async findBySubcategory(subcategory_id: string, include_completed = false){
+        
+        let tasks;
+
+        if(include_completed){
+            tasks = await this.ormRepository.find({
+                where: {
+                    subcategory_id,
+                    completed: false
+                }
+            });
+        }else {
+            tasks = await this.ormRepository.find({
+                where: {
+                    subcategory_id,
+                }
+            });            
+        }
 
         return tasks;
     }

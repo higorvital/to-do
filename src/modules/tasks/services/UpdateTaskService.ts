@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import AppError from "../../../shared/errors/AppError";
 import ITasksRepository from "../repositories/ITasksRepository";
-import {isBefore} from 'date-fns';
+import {isBefore, isSameDay} from 'date-fns';
 import Task from "../infra/typeorm/models/Task";
 import ISubcategoriesRepository from "../repositories/ISubcategoriesRepository";
 
@@ -48,29 +48,49 @@ class UpdateTaskService{
             throw new AppError("Tarefa não pertence a esse usuário");
         }
 
-        let dateTask = new Date(date.year, date.month - 1, date.day);
-        let dateTimeTask = new Date(dateTask);
-        let timeTask = null;
+        if(date){
 
-        if(time){
+            let dateTask = new Date(date.year, date.month - 1, date.day);
+            let dateTimeTask = new Date(dateTask);
+            let timeTask = null;
+    
+            if(time){
+    
+                const taskTimeUnavailable = await this.tasksRepository.findByDateTime({user_id, ...date, ...time});
+                if(taskTimeUnavailable && taskTimeUnavailable.id !== task.id){
+                    throw new AppError("Horário indisponível");
+                }
+    
+                timeTask = new Date();
+                timeTask.setHours(time.hour);
+                timeTask.setMinutes(time.minute);
+                timeTask.setSeconds(0);
+    
+                dateTimeTask.setHours(time.hour);
+                dateTimeTask.setMinutes(time.minute);
+                
+                if(isBefore(dateTimeTask, Date.now())){
+                    throw new AppError("Não pode criar uma tarefa em uma data passada");
+                }
 
-            const taskTimeUnavailable = await this.tasksRepository.findByDateTime({user_id, ...date, ...time});
-            if(taskTimeUnavailable && taskTimeUnavailable.id !== task.id){
-                throw new AppError("Horário indisponível");
+                Object.assign(task, {
+                    time: timeTask, 
+                 });
+
+                
+            } else{
+    
+                if(isBefore(dateTimeTask, Date.now()) && !isSameDay(dateTimeTask, Date.now())){
+                    throw new AppError("Não pode criar uma tarefa em uma data passada");
+                }
+    
             }
+    
+            Object.assign(task, {
+                date: dateTask,
+             });
 
-            timeTask = new Date();
-            timeTask.setHours(time.hour);
-            timeTask.setMinutes(time.minute);
-            timeTask.setSeconds(0);
-
-            dateTimeTask.setHours(time.hour);
-            dateTimeTask.setMinutes(time.minute);
-        }
-
-        if(isBefore(dateTimeTask, Date.now())){
-            throw new AppError("Não pode criar uma tarefa em uma data passada");
-        }
+        }    
 
         let subcategory;
 
@@ -89,8 +109,6 @@ class UpdateTaskService{
         Object.assign(task, {
            title,
            description,
-           date: dateTask,
-           time: timeTask, 
            subcategory,
            subcategory_id
         });

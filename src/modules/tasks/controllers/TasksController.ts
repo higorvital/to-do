@@ -83,12 +83,12 @@ class TasksController{
         const {task_id} = request.params;
 
         const schema = Yup.object().shape({
-            title: Yup.string().required(),
+            title: Yup.string(),
             description: Yup.string(),
             date: Yup.object().shape({
-                day: Yup.number().required(),
-                month: Yup.number().required(),
-                year: Yup.number().required(),
+                day: Yup.number(),
+                month: Yup.number(),
+                year: Yup.number(),
             }),
             time: Yup.object().shape({
                 hour: Yup.number(),
