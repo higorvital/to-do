@@ -85,15 +85,6 @@ class TasksController{
         const schema = Yup.object().shape({
             title: Yup.string(),
             description: Yup.string(),
-            date: Yup.object().shape({
-                day: Yup.number(),
-                month: Yup.number(),
-                year: Yup.number(),
-            }),
-            time: Yup.object().shape({
-                hour: Yup.number(),
-                minute: Yup.number(),
-            }),
             subcategory_id: Yup.string().nullable()
         });
 
