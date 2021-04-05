@@ -15,10 +15,10 @@ class Task {
     description: string;
 
     @Column('date')
-    date: Date;
+    date: Date | null;
 
     @Column('time')
-    time: Date;
+    time: Date | null;
 
     @Column()
     user_id: string;
@@ -31,7 +31,7 @@ class Task {
     completed: boolean;
 
     @Column('timestamp')
-    completed_at: Date;
+    completed_at: Date | null;
 
     @Column()
     important: boolean;

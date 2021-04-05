@@ -47,6 +47,8 @@ class UpdateTaskService{
             if(subcategory.category.user_id !== user_id){
                 throw new AppError("Essa categoria não pertence a esse usuário");
             }
+        }else if(!task.date){
+            throw new AppError("Tarefa precisa ter Subcategoria ou Data");
         }
 
         Object.assign(task, {

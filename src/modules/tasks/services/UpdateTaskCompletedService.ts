@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import AppError from "../../../shared/errors/AppError";
 import ITasksRepository from "../repositories/ITasksRepository";
 import Task from "../infra/typeorm/models/Task";
+import { parseISO } from "date-fns";
 
 interface UpdateTaskDTO {
     user_id: string;
@@ -27,6 +28,28 @@ class UpdateTaskCompletedService{
         if(task.user_id !== user_id){
             throw new AppError("Tarefa não pertence a esse usuário");
         }
+
+        if(task.completed && task.time){
+
+            const taskDate = String(task.date).split('-');
+            const taskTime = String(task.time).split(':');
+
+            const taskDateTime = {
+                day: Number(taskDate[2]),
+                month: Number(taskDate[1]),
+                year: Number(taskDate[0]),
+                hour: Number(taskTime[0]),
+                minute: Number(taskTime[1])
+            }
+
+            const tasksTimeUnavailable = await this.tasksRepository.findNonCompletedByDateTime({user_id, ...taskDateTime});
+            
+            if(tasksTimeUnavailable.length > 0 && tasksTimeUnavailable[0].id !== task.id){
+                throw new AppError("Horário indisponível");
+            }
+
+        }
+
 
         task.completed = !task.completed;
 

@@ -46,9 +46,9 @@ class TasksController{
             title: Yup.string().required(),
             description: Yup.string(),
             date: Yup.object().shape({
-                day: Yup.number().required(),
-                month: Yup.number().required(),
-                year: Yup.number().required(),
+                day: Yup.number(),
+                month: Yup.number(),
+                year: Yup.number(),
             }),
             time: Yup.object().shape({
                 hour: Yup.number(),

@@ -86,12 +86,6 @@ class TasksRepository implements ITasksRepository{
             // relations: ['subcategory']
         });
 
-
-        // console.log(this.connection.leftJoinAndSelect('tasks.subcategory','subcategories').where('tasks.user_id = :user_id AND tasks.date = :task_date', {user_id, task_date}).orderBy('time').getSql());
-
-        // const tasks = await this.connection.leftJoinAndSelect('tasks.subcategory','subcategory').where('tasks.user_id = :user_id AND tasks.date = :task_date', {user_id, task_date}).orderBy('time').getMany();
-
-        // const tasks = getManager().query('SELECT * FROM tasks LEFT JOIN subcategories ON tasks.subcategory_id = subcategories.id ORDER BY time');
         return tasks;
 
     }
@@ -112,6 +106,26 @@ class TasksRepository implements ITasksRepository{
         });
         
         return task;
+
+    }
+
+    public async findNonCompletedByDateTime({user_id, day, month, year, hour, minute}: IFindTasksByDateTime){
+
+        const parsedDay = String(day).padStart(2, '0');
+        const parsedMonth = String(month).padStart(2, '0');
+        const parsedHour = String(hour).padStart(2, '0');
+        const parsedMinute = String(minute).padStart(2, '0');
+
+        const tasks = await this.ormRepository.find({
+            where: {
+                user_id,
+                date: `${year}-${parsedMonth}-${parsedDay}`,
+                time: `${parsedHour}:${parsedMinute}:00`,
+                completed: false
+            }
+        });
+
+        return tasks;
 
     }
 

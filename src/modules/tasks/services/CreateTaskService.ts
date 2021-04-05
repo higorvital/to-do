@@ -19,7 +19,7 @@ interface DateDTO{
 interface CreateTaskDTO {
     title: string;
     description?: string;
-    date: DateDTO;
+    date?: DateDTO;
     time?: TimeDTO;
     important?: boolean;
     user_id: string;
@@ -38,36 +38,45 @@ class CreateTaskService{
 
     public async execute({user_id, title, date, time, description, important, subcategory_id}: CreateTaskDTO): Promise<Task>{
 
-        let dateTask = new Date(date.year, date.month - 1, date.day);
-        let dateTimeTask = new Date(dateTask);
+        if(!date && !subcategory_id){
+            throw new AppError("Tarefa precisa ter Subcategoria ou Data");
+        }
+
+        let dateTask;
         let timeTask;
 
-        if(time){
-
-            const taskTimeUnavailable = await this.tasksRepository.findByDateTime({user_id, ...date, ...time});
-
-            if(taskTimeUnavailable){
-                throw new AppError("Horário indisponível");
+        if(date){
+            dateTask = new Date(date.year, date.month - 1, date.day);
+            let dateTimeTask = new Date(dateTask);
+    
+            if(time){
+    
+                const tasksTimeUnavailable = await this.tasksRepository.findNonCompletedByDateTime({user_id, ...date, ...time});
+    
+                if(tasksTimeUnavailable.length > 0){
+                    throw new AppError("Horário indisponível");
+                }
+    
+                timeTask = new Date();
+                timeTask.setHours(time.hour);
+                timeTask.setMinutes(time.minute);
+                timeTask.setSeconds(0);
+    
+                dateTimeTask.setHours(time.hour);
+                dateTimeTask.setMinutes(time.minute);
+    
+                if(isBefore(dateTimeTask, Date.now())){
+                    throw new AppError("Não pode criar uma tarefa em uma data passada");
+                }
+            } else{
+    
+                if(isBefore(dateTimeTask, Date.now()) && !isSameDay(dateTimeTask, Date.now())){
+                    throw new AppError("Não pode criar uma tarefa em uma data passada");
+                }
+    
             }
-
-            timeTask = new Date();
-            timeTask.setHours(time.hour);
-            timeTask.setMinutes(time.minute);
-            timeTask.setSeconds(0);
-
-            dateTimeTask.setHours(time.hour);
-            dateTimeTask.setMinutes(time.minute);
-
-            if(isBefore(dateTimeTask, Date.now())){
-                throw new AppError("Não pode criar uma tarefa em uma data passada");
-            }
-        } else{
-
-            if(isBefore(dateTimeTask, Date.now()) && !isSameDay(dateTimeTask, Date.now())){
-                throw new AppError("Não pode criar uma tarefa em uma data passada");
-            }
-
         }
+
 
 
         if(subcategory_id){

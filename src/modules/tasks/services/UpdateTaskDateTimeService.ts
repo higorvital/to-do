@@ -52,8 +52,9 @@ class UpdateTaskDateTimeService{
     
             if(time){
     
-                const taskTimeUnavailable = await this.tasksRepository.findByDateTime({user_id, ...date, ...time});
-                if(taskTimeUnavailable && taskTimeUnavailable.id !== task.id){
+                const tasksTimeUnavailable = await this.tasksRepository.findNonCompletedByDateTime({user_id, ...date, ...time});
+
+                if(tasksTimeUnavailable.length > 0 && tasksTimeUnavailable[0].id !== task.id){
                     throw new AppError("Horário indisponível");
                 }
     
@@ -78,6 +79,8 @@ class UpdateTaskDateTimeService{
             }
     
             
+        }else if(!task.subcategory_id){
+            throw new AppError("Tarefa precisa ter Subcategoria ou Data");
         }    
         
         Object.assign(task, {

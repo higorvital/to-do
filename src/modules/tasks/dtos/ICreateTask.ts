@@ -12,7 +12,7 @@
 interface ICreateTask {
     title: string;
     description?: string;
-    date: Date;
+    date?: Date;
     time?: Date;
     important?: boolean;
     user_id: string;
